@@ -8,7 +8,7 @@ using namespace std;
 Song::Song() {
     title = "Empty";
     artist = "Empty";
-    int size = 0;
+    int size = 512;
 }
 
 Song::Song(string newTitle, string newArtist, int newSize) {

@@ -4,15 +4,22 @@
 #include "UtPod.h"
 #include <string>
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <random>
 
 using namespace std;
 
 UtPod::UtPod() {
     memSize = MAX_MEMORY;
     songs = NULL;
+    int currentTime = time(0);
+    srand(currentTime);
 }
 
 UtPod::UtPod(int size) {
+    int currentTime = time(0);
+    srand(currentTime);
     if((size > MAX_MEMORY)||(size<1)) {
         memSize = MAX_MEMORY;
     }
@@ -64,7 +71,7 @@ int UtPod::removeSong(Song const &s) {
 void UtPod::showSongList() {
     SongNode* current = songs;
     while(current != NULL){
-        cout << current ->s.getTitle() << ", " << current ->s.getArtist() << ", " << current ->s.getSize() << endl << endl;
+        cout << current ->s.getTitle() << ", " << current ->s.getArtist() << ", " << current ->s.getSize() << "MB"<<endl;
         current = current->next;
     }
 
@@ -96,7 +103,28 @@ void UtPod::clearMemory() {
 }
 
 void UtPod::shuffle() {
-    songs = songs;
+    int size = 0;
+    SongNode *current = songs;
+    while(current != NULL){ //Finding the size of the linked list
+        size += 1;
+        current = current ->next;
+    }
+    for(int i = 0; i < 2000;i++){
+        int swapIndex = rand()%(size);
+        SongNode *p1 = songs;
+        for(int j = 0; j<swapIndex; j++){
+            p1=p1->next;
+        }
+        swapIndex = rand()%(size);
+        SongNode *p2 = songs;
+        for(int j = 0; j<swapIndex; j++){
+            p2=p2->next;
+        }
+        Song tempSong = p1->s;
+        p1->s = p2->s;
+        p2->s = tempSong;
+    }
+
 }
 
 void UtPod::sortSongList() {

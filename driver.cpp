@@ -31,36 +31,51 @@ You will want to do more complete testing.
 #include <iostream>
 #include "Song.h"
 #include "UtPod.h"
+#include <fstream>
 
 using namespace std;
 
 int main(int argc, char *argv[])
 {
+    ifstream inFile;
+    inFile.open("playlist1.txt");
     UtPod t;
-
-    Song s1("Beatles", "Hey Jude1", 4);
-    int result = t.addSong(s1);
-
-
-    Song s2("Beatles", "Hey Jude2", 5);
-    result = t.addSong(s2);
-
-
-    Song s3("Beatles", "Hey Jude3", 6);
-    result = t.addSong(s3);
-
-    Song s4("Beatles", "Hey Jude4", 7);
-    result = t.addSong(s4);
-
-    Song s5("Beatles", "Hey Jude5", 241);
-    result = t.addSong(s5);
-
+    string artist;
+    string title;
+    string size;
+    inFile >> artist;
+    while(inFile){
+        inFile >> title;
+        inFile >> size;
+        Song s(title, artist, stoi(size));
+        int result = t.addSong(s);
+        if(result != 0){
+            cout << "Not enough memory remaining to add " << title << " by " << artist << endl;
+        }
+        inFile >> artist;
+    }
+    inFile.close();
+    cout << "Original List of Songs Displayed Opposite Order of Input File:" << endl<<endl;
     t.showSongList();
-    cout << endl;
     t.sortSongList();
-
+    cout << endl << "Sorted List of Songs:"<<endl<<endl;
     t.showSongList();
-    cout << "memory = " << t.getRemainingMemory() << endl;
-
-
+    cout << endl << "Shuffled List of Songs:"<<endl<<endl;
+    t.shuffle();
+    t.showSongList();
+    cout << endl << "Reshuffled List of Songs:"<<endl<<endl;
+    t.shuffle();
+    t.showSongList();
+    cout << endl << "Reshuffled List of Songs:"<<endl<<endl;
+    t.shuffle();
+    t.showSongList();
+    Song s1("Homemade","Jake_Owen",12);
+    t.removeSong(s1);
+    Song s2("Heartless","Diplo",24);
+    t.removeSong(s2);
+    cout << endl << "Attemped to remove Homemade by Jake_Owen (12MB) and Heartless by Diplo" <<endl<<endl;
+    t.showSongList();
+    t.sortSongList();
+    cout << endl << "Sorted List of Songs after multiple shuffles:"<<endl<<endl;
+    t.showSongList();
 }
