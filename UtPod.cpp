@@ -2,39 +2,39 @@
 // Created by jwall on 10/17/2019.
 //
 #include "UtPod.h"
+#include "Song.h"
 #include <string>
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
-#include <random>
 
 using namespace std;
 
 UtPod::UtPod() {
     memSize = MAX_MEMORY;
-    songs = NULL;
-    int currentTime = time(0);
+    songs = NULL; // pointer to the head of the linked list
+    int currentTime = time(0); //seeding the random function so that shuffle works properly
     srand(currentTime);
 }
 
 UtPod::UtPod(int size) {
     int currentTime = time(0);
-    srand(currentTime);
+    srand(currentTime); //seeding the random function so that shuffle works properly
     if((size > MAX_MEMORY)||(size<1)) {
-        memSize = MAX_MEMORY;
+        memSize = MAX_MEMORY; // default memory size is 512
     }
     else{
         memSize = size;
     }
-    songs = NULL;
+    songs = NULL; // pointer to the head of the linked list
 }
 
 int UtPod::addSong(Song const &s) {
     if(getRemainingMemory() < s.getSize()){
-        return -1;
+        return NO_MEMORY; //there is not enough memory left to add the song in the parameter
     }
     else{
-        SongNode *newSong = new SongNode;
+        SongNode *newSong = new SongNode; //dynamically allocating memory for each song node
         newSong->s = s;
         newSong->next = songs;
         songs = newSong;
@@ -45,15 +45,15 @@ int UtPod::addSong(Song const &s) {
 int UtPod::removeSong(Song const &s) {
     SongNode* previous = NULL;
     SongNode* current = songs;
-    int status = -1;
+    int status = NOT_FOUND;
     while(current != NULL){
-        if((current->s.getArtist()) == (s.getArtist()) && ((current->s.getTitle())==(s.getTitle()))){
+        if(current->s == s){ //using the overloaded == comparison operator
             status = SUCCESS;
-            if(previous==NULL){
+            if(previous==NULL){ //checking for if the song to be removed is at the top of the list
                 songs = current->next;
-                delete current;
+                delete current; //freeing up the dynamically allocated memory for the node
             }
-            else{
+            else{ //if the song is in the middle or at the end, simply move the node pointers
                 previous->next = current ->next;
                 delete current;
             }
@@ -65,12 +65,12 @@ int UtPod::removeSong(Song const &s) {
         }
     }
 
-    return status;
+    return status; //if no songs in the list match the parameter, the default status is NOT_FOUND
 }
 
 void UtPod::showSongList() {
     SongNode* current = songs;
-    while(current != NULL){
+    while(current != NULL){ //iterate through the song list showing each song
         cout << current ->s.getTitle() << ", " << current ->s.getArtist() << ", " << current ->s.getSize() << "MB"<<endl;
         current = current->next;
     }
@@ -78,13 +78,13 @@ void UtPod::showSongList() {
 }
 
 UtPod::~UtPod() {
-    clearMemory();
+    clearMemory(); //failsafe so that no memory leaks are left when the UtPod falls out of scope
 }
 
 int UtPod::getRemainingMemory() {
     int memUsed = 0;
     SongNode* current = songs;
-    while(current != NULL){
+    while(current != NULL){ //iterated through the linked list summing the memory used to subtract from the total
         memUsed += current->s.getSize();
         current = current->next;
     }
@@ -93,13 +93,13 @@ int UtPod::getRemainingMemory() {
 
 void UtPod::clearMemory() {
     SongNode* current = songs;
-    SongNode* nextNode;
+    SongNode* nextNode; //move through the linked list freeing up all the dynamically allocated memory
     while(current != NULL){
         nextNode = current->next;
         delete current;
         current = nextNode;
     }
-    songs = NULL;
+    songs = NULL; //reset the head to NULL so more songs can be added
 }
 
 void UtPod::shuffle() {

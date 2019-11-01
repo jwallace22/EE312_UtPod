@@ -15,11 +15,16 @@ private:
 public:
     //Default constructor
     //set the title and artist to "Empty" and the size to 512(MB)
+    //not required in the assigment but can be useful in certain test cases for the driver
     Song();
-    //Constructor with size parameter
+
+    // Constructor with size parameter
     // set the title, artist and size to those input by the user.
-    //the next pointer is default NULL unless a new one is entered by the user
+    // the next pointer is default NULL unless a new one is entered by the user
     Song(string newTitle, string newArtist, int newSize);
+
+    // numerous gets and sets used below so that the private instance variables can be accessed outside of the object
+    // all assume valid inputs in the set functions
     void setTitle(string newTitle);
     void setArtist(string newArtist);
     void setSize(int newSize);
@@ -27,47 +32,11 @@ public:
     string getArtist() const ;
     int getSize() const ;
 
-    bool operator<(Song s2){
-        int titleCompare = title.compare(s2.title);
-        int artistCompare = artist.compare(s2.artist);
-        int size2 = s2.size;
-        if(artistCompare < 0){
-            return true;
-        }
-        else if((artistCompare==0)&&(titleCompare<0)){
-            return true;
-        }
-        else if((artistCompare==0)&&(titleCompare==0)&&(size<size2)){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    bool operator>(Song s2){
-        int titleCompare = title.compare(s2.title);
-        int artistCompare = artist.compare(s2.artist);
-        int size2 = s2.size;
-        if(artistCompare > 0){
-            return true;
-        }
-        else if((artistCompare==0)&&(titleCompare>0)){
-            return true;
-        }
-        else if((artistCompare==0)&&(titleCompare==0)&&(size>size2)){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    bool operator==(Song s2){
-        string title2 = s2.title;
-        string artist2 = s2.artist;
-        int size2 = s2.size;
-        return (title.compare(title2) == 0) && (artist.compare(artist2) == 0) && (size2 == size);
+    //overloading comparison operators so that I can compare the songs in sortSongList() and removeSong()
+    bool operator<(Song const &s2);
+    bool operator>(Song const &s2);
+    bool operator==(Song const &s2){
+        return (title.compare(s2.getTitle()) == 0) && (artist.compare(s2.getArtist()) == 0) && (s2.getSize() == size);
     }
 };
 

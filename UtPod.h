@@ -37,14 +37,14 @@ public:
 
     /* FUNCTION - int addSong
      * attempts to add a new song to the UtPod
-         o returns a 0 if successful
-         o returns -1 if not enough memory to add the song
+         o returns SUCCESS  if successful
+         o returns NO_MEMORY if not enough memory to add the song
 
      precondition: s is a valid Song
 
-     input parms -
+     input parms - a valid song is passed by reference but unchangeable 
 
-     output parms -
+     output parms - a copy of the song is added to the top of the linked list of songs
     */
 
     int addSong(Song const &s);
@@ -53,13 +53,13 @@ public:
     /* FUNCTION - int removeSong
      * attempts to remove a song from the UtPod
      * removes the first instance of a song that is in the the UtPod multiple times
-         o returns 0 if successful
-         o returns -1 if nothing is removed
+         o returns SUCCESS if successful
+         o returns NOT_FOUND if nothing is removed
 
 
-       input parms -
+       input parms - a valid song is passed by reference but does not have to be in the list
 
-       output parms -
+       output parms - if the song is in the list, it is removed, Success is returned if found and Not_Found is returned if the input song is not in the list
     */
 
     int removeSong(Song const &s);
@@ -69,9 +69,9 @@ public:
      *  shuffles the songs into random order
         o will do nothing if there are less than two songs in the current list
 
-       input parms -
+       input parms - an initialized list that has an number of songs or no songs at all
 
-       output parms -
+       output parms - the list is shuffled pseudo-randomly by swapping the values in the nodes
     */
 
     void shuffle();
@@ -81,9 +81,9 @@ public:
      * prints the current list of songs in order from first to last to standard output
      * format - Title, Artist, size in MB (one song per line)
 
-       input parms -
+       input parms - an initialized song list with any number of songs or no songs at all
 
-       output parms -
+       output parms - the current list of songs is printed to the screen
     */
 
     void showSongList();
@@ -93,9 +93,9 @@ public:
      *  sorts the songs in ascending order
         o will do nothing if there are less than two songs in the current list
 
-       input parms -
+       input parms - an initialized list of songs with any number of elements 
 
-       output parms -
+       output parms - the songs are sorted by artist, then title, then size inside of the linked list
     */
 
     void sortSongList();
@@ -104,9 +104,9 @@ public:
     /* FUNCTION - void clearMemory
      * clears all the songs from memory
 
-       input parms - none
+       input parms - an initialized song list with a NULL pointer at the end
 
-       output parms - all memory has been deleted in the linked list
+       output parms - all the allocated memory in the Linked list is freed and the head ptr is assigned NULL
     */
     void clearMemory();
 
@@ -115,9 +115,9 @@ public:
      *  returns the total amount of memory in the UtPod
         o will do nothing if there are less than two songs in the current list
 
-       input parms -
+       input parms - the memSize has been initialized by the constructor
 
-       output parms -
+       output parms - simply returns how much memory the UtPod has total, regardless of the ammount used
     */
 
     int getTotalMemory() {
@@ -129,9 +129,9 @@ public:
     /* FUNCTION - int getRemainingMemory
      *  returns the amount of memory available for adding new songs
 
-       input parms -
+       input parms - the linked list has been initialized and all songs have a valid size
 
-       output parms -
+       output parms - returns the amount of memory left in the UtPod to be used by more songs
     */
 
     int getRemainingMemory();
